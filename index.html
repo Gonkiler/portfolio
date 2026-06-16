@@ -186,11 +186,22 @@
       const searchInput = document.getElementById("project-search");
       const shareFeedback = document.getElementById("share-feedback");
       const categories = ["All", ...new Set(projects.map((project) => project.category))];
-      const SEARCH_DEBOUNCE_DELAY_MS = 120;
+      const SEARCH_DEBOUNCE_DELAY_MS = 300;
 
       let activeCategory = "All";
       let searchText = "";
       let searchDebounceTimerId;
+      let feedbackClearTimerId;
+
+      function setShareFeedback(message, clearAfterMs = 2500) {
+        shareFeedback.textContent = message;
+        clearTimeout(feedbackClearTimerId);
+        if (clearAfterMs > 0) {
+          feedbackClearTimerId = setTimeout(() => {
+            shareFeedback.textContent = "";
+          }, clearAfterMs);
+        }
+      }
 
       function createLinkButton(label, url) {
         const link = document.createElement("a");
@@ -208,23 +219,20 @@
         try {
           if (navigator.share) {
             await navigator.share({ title: project.name, text: shareText, url: project.demoUrl });
-            shareFeedback.textContent = `Shared: ${project.name}`;
+            setShareFeedback(`Shared: ${project.name}`);
           } else if (navigator.clipboard?.writeText) {
             await navigator.clipboard.writeText(project.demoUrl);
-            shareFeedback.textContent = `Copied link for ${project.name}.`;
+            setShareFeedback(`Copied link for ${project.name}.`);
           } else {
             throw new Error("Share not supported");
           }
         } catch (error) {
           if (error instanceof DOMException && error.name === "AbortError") {
-            shareFeedback.textContent = "Share cancelled.";
-            setTimeout(() => {
-              shareFeedback.textContent = "";
-            }, 1200);
+            setShareFeedback("Share cancelled.");
             return;
           }
           console.error(error);
-          shareFeedback.textContent = `Could not share ${project.name}. Please use the Demo link.`;
+          setShareFeedback(`Could not share ${project.name}. Please use the Demo link.`);
         }
       }
 
