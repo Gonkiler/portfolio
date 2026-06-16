@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>POZA STUDIOS — Videogame Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sapphire: #2D5DA1;
+    --sapphire-light: #3D72C0;
+    --sapphire-dark: #1E3F70;
+    --sapphire-pale: #0A1929;
+    --sapphire-glow: rgba(45, 93, 161, 0.25);
+
+    --white: #F5F6F7;
+    --gray-100: #E8EAED;
+    --gray-200: #C9CDD4;
+    --gray-400: #8A909C;
+    --gray-600: #4A5060;
+    --gray-800: #1E2128;
+    --gray-900: #12141A;
+    --black: #0C0D12;
+
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+
+    --nav-h: 72px;
+    --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    background: rgba(12, 13, 18, 0.75);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(45, 93, 161, 0.18);
+    transition: background var(--transition);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-logo-accent {
+    color: var(--sapphire-light);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    margin-left: auto;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-200);
+    text-decoration: none;
+    position: relative;
+    transition: color var(--transition);
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0; height: 1px;
+    background: var(--sapphire-light);
+    transition: width var(--transition);
+  }
+
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    margin-left: 2.5rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--sapphire);
+    color: var(--sapphire-light);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+
+  .nav-cta:hover {
+    background: var(--sapphire);
+    color: var(--white);
+  }
+
+  /* ── SLIDER ── */
+  .slider {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Slide backgrounds — geometric pattern layers */
+  .slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .slide-1 .slide-bg {
+    background: linear-gradient(135deg, #0C0D12 0%, #0A1929 40%, #1E3F70 100%);
+  }
+  .slide-2 .slide-bg {
+    background: linear-gradient(145deg, #0C0D12 0%, #12141A 50%, #1A1E28 100%);
+  }
+  .slide-3 .slide-bg {
+    background: linear-gradient(120deg, #0C0D12 0%, #0D1A2E 60%, #2D5DA1 130%);
+  }
+  .slide-4 .slide-bg {
+    background: linear-gradient(150deg, #080A10 0%, #1E2128 50%, #12141A 100%);
+  }
+
+  /* SVG decorative grid overlay */
+  .slide-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image:
+      linear-gradient(var(--gray-400) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gray-400) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Animated accent shape per slide */
+  .slide-accent {
+    position: absolute;
+    right: -4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55vw;
+    height: 55vw;
+    max-width: 700px;
+    max-height: 700px;
+    opacity: 0.12;
+    border: 1px solid var(--sapphire-light);
+    transform-style: preserve-3d;
+  }
+
+  .slide-accent::before {
+    content: '';
+    position: absolute;
+    inset: 10%;
+    border: 1px solid var(--sapphire);
+    transform: rotate(45deg);
+  }
+
+  .slide.active .slide-accent {
+    animation: rotateAccent 20s linear infinite;
+  }
+
+  @keyframes rotateAccent {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to   { transform: translateY(-50%) rotate(360deg); }
+  }
+
+  /* Sapphire side stripe */
+  .slide-stripe {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--sapphire);
+  }
+
+  .slide-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 6rem;
+    max-width: 680px;
+    padding-top: var(--nav-h);
+  }
+
+  .slide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sapphire-light);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.6s 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide-tag::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--sapphire-light);
+  }
+
+  .slide.active .slide-tag {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.7s 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide.active .slide-title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-title em {
+    color: var(--sapphire-light);
+    font-style: normal;
+  }
+
+  .slide-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--gray-200);
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.7s 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide.active .slide-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.6s 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide.active .slide-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    padding: 0.875rem 2rem;
+    background: var(--sapphire);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--sapphire);
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--sapphire-light);
+    transform: translateX(-100%);
+    transition: transform var(--transition);
+  }
+
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-ghost {
+    padding: 0.875rem 2rem;
+    color: var(--gray-200);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--gray-600);
+    transition: all var(--transition);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--gray-200);
+    color: var(--white);
+  }
+
+  /* Slider controls */
+  .slider-controls {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 10;
+  }
+
+  .slider-dots {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .dot {
+    width: 24px; height: 2px;
+    background: var(--gray-600);
+    cursor: pointer;
+    transition: all var(--transition);
+    border: none;
+    padding: 0;
+  }
+
+  .dot.active {
+    width: 48px;
+    background: var(--sapphire-light);
+  }
+
+  .dot:hover { background: var(--gray-200); }
+
+  .slider-arrows {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+  }
+
+  .arrow-btn {
+    width: 40px; height: 40px;
+    border: 1px solid var(--gray-600);
+    background: transparent;
+    color: var(--gray-200);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+    font-size: 1rem;
+  }
+
+  .arrow-btn:hover {
+    border-color: var(--sapphire);
+    color: var(--sapphire-light);
+  }
+
+  .slider-counter {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--gray-400);
+    letter-spacing: 0.1em;
+    margin-left: 1rem;
+  }
+
+  /* Progress bar */
+  .slider-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--sapphire);
+    z-index: 10;
+    transition: width 0.1s linear;
+  }
+
+  /* ── FEATURED PROJECTS ── */
+  section.featured {
+    padding: 8rem 6rem;
+    background: var(--gray-900);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sapphire-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-800);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    letter-spacing: 0.03em;
+    color: var(--white);
+    margin-bottom: 4rem;
+    line-height: 1;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+
+  .project-card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .project-card-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover .project-card-bg {
+    transform: scale(1.06);
+  }
+
+  .project-card:nth-child(1) .project-card-bg { background: linear-gradient(180deg, #0D1A2E 0%, #2D5DA1 100%); }
+  .project-card:nth-child(2) .project-card-bg { background: linear-gradient(180deg, #12141A 0%, #1E3F70 100%); }
+  .project-card:nth-child(3) .project-card-bg { background: linear-gradient(180deg, #0A0C10 0%, #3D72C0 100%); }
+
+  /* Decorative geo shapes inside cards */
+  .card-geo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.15;
+  }
+
+  .card-geo svg {
+    width: 70%;
+    height: 70%;
+  }
+
+  .project-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(12, 13, 18, 0.95) 0%, rgba(12, 13, 18, 0.2) 60%, transparent 100%);
+  }
+
+  .project-card-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2rem;
+    transform: translateY(2rem);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover .project-card-info {
+    transform: translateY(0);
+  }
+
+  .project-genre {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sapphire-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    color: var(--gray-200);
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.4s 0.05s;
+  }
+
+  .project-card:hover .project-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sapphire-light);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.4s 0.1s;
+  }
+
+  .project-card:hover .project-link { opacity: 1; }
+
+  .project-link::after {
+    content: '→';
+    transition: transform var(--transition);
+  }
+
+  .project-link:hover::after { transform: translateX(4px); }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--sapphire-dark);
+    border-top: 1px solid rgba(61, 114, 192, 0.3);
+    border-bottom: 1px solid rgba(61, 114, 192, 0.3);
+    padding: 3rem 6rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 1rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-number span { color: var(--sapphire-light); }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── ABOUT ── */
+  section.about {
+    padding: 10rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+    background: var(--black);
+  }
+
+  .about-copy .section-label { margin-bottom: 1rem; }
+
+  .about-copy h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    letter-spacing: 0.03em;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+
+  .about-copy p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--gray-200);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-copy a.btn-primary {
+    margin-top: 1.5rem;
+    display: inline-block;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+
+  .about-card {
+    background: var(--gray-900);
+    border: 1px solid var(--gray-800);
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 2rem;
+    width: 4rem; height: 3px;
+    background: var(--sapphire);
+  }
+
+  .pillar {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--gray-800);
+  }
+
+  .pillar:last-child { border-bottom: none; }
+
+  .pillar-num {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--sapphire-light);
+    letter-spacing: 0.1em;
+    min-width: 28px;
+    padding-top: 0.1rem;
+  }
+
+  .pillar-title {
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+
+  .pillar-body {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--gray-400);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--gray-900);
+    border-top: 1px solid var(--gray-800);
+    padding: 4rem 6rem 3rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .footer-brand .nav-logo {
+    margin-bottom: 1rem;
+    display: inline-flex;
+  }
+
+  .footer-brand p {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--gray-400);
+    line-height: 1.7;
+    max-width: 280px;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gray-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    transition: all var(--transition);
+  }
+
+  .social-link:hover {
+    border-color: var(--sapphire);
+    color: var(--sapphire-light);
+  }
+
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-col a {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--gray-200);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .footer-col a:hover { color: var(--white); }
+
+  .footer-bottom {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--gray-800);
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--gray-600);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-bottom a { color: var(--sapphire-light); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-logo">POZA<span class="nav-logo-accent">.</span>STUDIOS</a>
+  <ul class="nav-links">
+    <li><a href="#slider">Inicio</a></li>
+    <li><a href="#featured">Proyectos</a></li>
+    <li><a href="#about">Estudio</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contacto</a>
+</nav>
+
+<!-- ── SLIDER ── -->
+<section class="slider" id="inicio">
+
+  <!-- Slide 1 -->
+  <div class="slide slide-1 active">
+    <div class="slide-bg"></div>
+    <div class="slide-grid"></div>
+    <div class="slide-stripe"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <span class="slide-tag">Nuevo lanzamiento — 2025</span>
+      <h1 class="slide-title">ECLIPSE<br /><em>PROTOCOL</em></h1>
+      <p class="slide-desc">Un RPG de acción ambientado en una metrópolis cyberpunk donde las decisiones reescriben el destino de millones. Mundo abierto. Narrativa procedural.</p>
+      <div class="slide-actions">
+        <a href="#" class="btn-primary"><span>Ver proyecto</span></a>
+        <a href="#" class="btn-ghost">Tráiler oficial</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide slide-2">
+    <div class="slide-bg"></div>
+    <div class="slide-grid"></div>
+    <div class="slide-stripe"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <span class="slide-tag">En desarrollo — Anunciado</span>
+      <h1 class="slide-title">FRACTURED<br /><em>HORIZON</em></h1>
+      <p class="slide-desc">Un shooter táctico en primera persona con mecánicas de realidad alternativa. Multijugador competitivo para hasta 64 jugadores simultáneos.</p>
+      <div class="slide-actions">
+        <a href="#" class="btn-primary"><span>Añadir a wishlist</span></a>
+        <a href="#" class="btn-ghost">Más información</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide slide-3">
+    <div class="slide-bg"></div>
+    <div class="slide-grid"></div>
+    <div class="slide-stripe"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <span class="slide-tag">Disponible ahora</span>
+      <h1 class="slide-title">VOID<br /><em>ARCHITECTS</em></h1>
+      <p class="slide-desc">Construye civilizaciones en el borde del universo conocido. Simulación de gestión con profundidad estratégica y narrativa generada por IA.</p>
+      <div class="slide-actions">
+        <a href="#" class="btn-primary"><span>Jugar ahora</span></a>
+        <a href="#" class="btn-ghost">Ver gameplay</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide slide-4">
+    <div class="slide-bg"></div>
+    <div class="slide-grid"></div>
+    <div class="slide-stripe"></div>
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <span class="slide-tag">Pre-producción — 2026</span>
+      <h1 class="slide-title">DEEP<br /><em>RESONANCE</em></h1>
+      <p class="slide-desc">Un juego de aventura y misterio ambientado en las profundidades oceánicas. Exploración submarina, ecosistemas vivos y narrativa emocional.</p>
+      <div class="slide-actions">
+        <a href="#" class="btn-primary"><span>Seguir novedades</span></a>
+        <a href="#" class="btn-ghost">Concepto art</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="slider-controls">
+    <div class="slider-dots">
+      <button class="dot active" data-index="0" aria-label="Slide 1"></button>
+      <button class="dot" data-index="1" aria-label="Slide 2"></button>
+      <button class="dot" data-index="2" aria-label="Slide 3"></button>
+      <button class="dot" data-index="3" aria-label="Slide 4"></button>
+    </div>
+    <div class="slider-arrows">
+      <button class="arrow-btn" id="prev" aria-label="Anterior">&#8592;</button>
+      <button class="arrow-btn" id="next" aria-label="Siguiente">&#8594;</button>
+    </div>
+    <span class="slider-counter" id="counter">01 / 04</span>
+  </div>
+
+  <div class="slider-progress" id="progress"></div>
+</section>
+
+<!-- ── FEATURED PROJECTS ── -->
+<section class="featured" id="featured">
+  <div class="section-label">Portafolio de proyectos</div>
+  <h2 class="section-title">NUESTROS<br />TÍTULOS</h2>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-card-bg"></div>
+      <div class="card-geo">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="100,10 190,55 190,145 100,190 10,145 10,55" stroke="white" stroke-width="1"/>
+          <polygon points="100,40 160,70 160,130 100,160 40,130 40,70" stroke="white" stroke-width="0.5"/>
+          <circle cx="100" cy="100" r="30" stroke="white" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-info">
+        <div class="project-genre">RPG · Acción</div>
+        <div class="project-name">ECLIPSE PROTOCOL</div>
+        <p class="project-desc">Mundo cyberpunk con narrativa ramificada y mecánicas de hacking en tiempo real.</p>
+        <a href="#" class="project-link">Explorar proyecto</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-card-bg"></div>
+      <div class="card-geo">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="160" height="160" stroke="white" stroke-width="1"/>
+          <rect x="50" y="50" width="100" height="100" stroke="white" stroke-width="0.5" transform="rotate(45 100 100)"/>
+          <rect x="75" y="75" width="50" height="50" stroke="white" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-info">
+        <div class="project-genre">Shooter · Táctico</div>
+        <div class="project-name">FRACTURED HORIZON</div>
+        <p class="project-desc">Combate táctico multijugador con mecánicas de realidad alternativa únicas.</p>
+        <a href="#" class="project-link">Explorar proyecto</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-card-bg"></div>
+      <div class="card-geo">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="80" stroke="white" stroke-width="1"/>
+          <circle cx="100" cy="100" r="50" stroke="white" stroke-width="0.5"/>
+          <circle cx="100" cy="100" r="20" stroke="white" stroke-width="0.5"/>
+          <line x1="100" y1="20" x2="100" y2="180" stroke="white" stroke-width="0.5"/>
+          <line x1="20" y1="100" x2="180" y2="100" stroke="white" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-info">
+        <div class="project-genre">Estrategia · Simulación</div>
+        <div class="project-name">VOID ARCHITECTS</div>
+        <p class="project-desc">Construye imperios galácticos con sistemas económicos y políticos complejos.</p>
+        <a href="#" class="project-link">Explorar proyecto</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-card-bg"></div>
+      <div class="card-geo">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="80" stroke="white" stroke-width="1"/>
+          <circle cx="100" cy="100" r="50" stroke="white" stroke-width="0.5"/>
+          <circle cx="100" cy="100" r="20" stroke="white" stroke-width="0.5"/>
+          <line x1="100" y1="20" x2="100" y2="180" stroke="white" stroke-width="0.5"/>
+          <line x1="20" y1="100" x2="180" y2="100" stroke="white" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-info">
+        <div class="project-genre">RPG · Aventuras</div>
+        <div class="project-name">Ether</div>
+        <p class="project-desc">Explora mundos fantásticos y vive aventuras épicas en un universo lleno de misterios y desafíos.</p>
+        <a href="#" class="project-link">Explorar proyecto</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-number">12<span>+</span></div>
+    <div class="stat-label">Títulos publicados</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">4<span>M</span></div>
+    <div class="stat-label">Jugadores activos</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">8</div>
+    <div class="stat-label">Premios de industria</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">6<span>+</span></div>
+    <div class="stat-label">Años de trayectoria</div>
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
+<section class="about" id="about">
+  <div class="about-copy">
+    <div class="section-label">Sobre el estudio</div>
+    <h2>DISEÑO QUE<br />TRASCIENDE<br /><em style="color:var(--sapphire-light);font-style:normal;">PANTALLAS</em></h2>
+    <p>Somos un equipo de desarrolladores y diseñadores apasionados por crear experiencias interactivas que van más allá del entretenimiento. Cada proyecto nace de una investigación profunda sobre mecánicas de juego, psicología del jugador y narrativa emergente.</p>
+    <p>Trabajamos con tecnologías de última generación y un flujo de trabajo que combina arte conceptual, prototipado ágil y testing continuo con comunidades reales.</p>
+    <a href="#" class="btn-primary"><span>Conoce al equipo</span></a>
+  </div>
+
+  <div class="about-visual">
+    <div class="about-card">
+      <div class="pillar">
+        <span class="pillar-num">01</span>
+        <div>
+          <div class="pillar-title">Diseño centrado en el jugador</div>
+          <div class="pillar-body">Cada mecánica, cada sistema, cada decisión de diseño parte de entender profundamente al jugador y sus motivaciones.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">02</span>
+        <div>
+          <div class="pillar-title">Narrativa procedural</div>
+          <div class="pillar-body">Utilizamos sistemas de IA para generar historias que se adaptan a las decisiones del jugador en tiempo real, creando experiencias únicas.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">03</span>
+        <div>
+          <div class="pillar-title">Tecnología de vanguardia</div>
+          <div class="pillar-body">Motor propio optimizado para plataformas modernas. Renderizado avanzado, física realista y sistemas de red de baja latencia.</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">04</span>
+        <div>
+          <div class="pillar-title">Comunidad primero</div>
+          <div class="pillar-body">Desarrollamos con y para nuestra comunidad. Betas abiertas, transparencia en el proceso y feedback loops constantes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="contact">
+  <div class="footer-brand">
+    <a href="#" class="nav-logo">POZA<span class="nav-logo-accent">.</span>STUDIOS</a>
+    <p>Creamos experiencias de juego que desafían los límites de lo posible. Con sede en Madrid, alcance global.</p>
+    <div class="footer-social">
+      <a href="#" class="social-link" aria-label="Twitter">X</a>
+      <a href="#" class="social-link" aria-label="Discord">DC</a>
+      <a href="#" class="social-link" aria-label="YouTube">YT</a>
+      <a href="#" class="social-link" aria-label="LinkedIn">LI</a>
+    </div>
+  </div>
+
+  <div class="footer-col">
+    <h4>Juegos</h4>
+    <ul>
+      <li><a href="#">Eclipse Protocol</a></li>
+      <li><a href="#">Fractured Horizon</a></li>
+      <li><a href="#">Void Architects</a></li>
+      <li><a href="#">Deep Resonance</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-col">
+    <h4>Estudio</h4>
+    <ul>
+      <li><a href="#">Sobre nosotros</a></li>
+      <li><a href="#">Tecnología</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Trabaja con nosotros</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-col">
+    <h4>Contacto</h4>
+    <ul>
+      <li><a href="#">hola@pozastudios.com</a></li>
+      <li><a href="#">Prensa</a></li>
+      <li><a href="#">Publishers</a></li>
+      <li><a href="#">Inversores</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 Poza Studios S.L. — Madrid, España</p>
+    <p><a href="#">Privacidad</a> &nbsp;·&nbsp; <a href="#">Términos</a> &nbsp;·&nbsp; <a href="#">Cookies</a></p>
+  </div>
+</footer>
+
+<script>
+  // Slider logic
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+  let timer = null;
+  let progTimer = null;
+  const DURATION = 5000;
+  let progStart = null;
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    startProgress();
+    resetTimer();
+  }
+
+  function startProgress() {
+    if (progTimer) cancelAnimationFrame(progTimer);
+    progStart = performance.now();
+    progress.style.transition = 'none';
+    progress.style.width = '0%';
+    requestAnimationFrame(animateProgress);
+  }
+
+  function animateProgress(now) {
+    const elapsed = now - progStart;
+    const pct = Math.min((elapsed / DURATION) * 100, 100);
+    progress.style.width = pct + '%';
+    if (pct < 100) {
+      progTimer = requestAnimationFrame(animateProgress);
+    }
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), DURATION);
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => goTo(parseInt(dot.dataset.index)));
+  });
+
+  document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  // Touch swipe
+  let touchStartX = null;
+  document.getElementById('inicio').addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  document.getElementById('inicio').addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+    touchStartX = null;
+  });
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.background = window.scrollY > 60
+      ? 'rgba(12,13,18,0.95)'
+      : 'rgba(12,13,18,0.75)';
+  });
+
+  // Init
+  goTo(0);
+</script>
+</body>
+</html>
