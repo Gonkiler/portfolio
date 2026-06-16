@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio | Interactive Projects</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: #1e293b;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #22d3ee;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        width: min(1100px, 92vw);
+        margin: 0 auto;
+        padding: 2rem 0 3rem;
+      }
+
+      h1,
+      h2 {
+        margin: 0 0 0.75rem;
+      }
+
+      .lede {
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      .controls {
+        display: grid;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .chip,
+      .action-btn {
+        border: 1px solid #334155;
+        background: #0b1220;
+        color: var(--text);
+        padding: 0.45rem 0.75rem;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      .chip[aria-pressed="true"] {
+        background: rgba(34, 211, 238, 0.15);
+        border-color: var(--accent);
+      }
+
+      .search {
+        width: min(420px, 100%);
+        border: 1px solid #334155;
+        background: #0b1220;
+        color: var(--text);
+        border-radius: 0.6rem;
+        padding: 0.6rem 0.8rem;
+      }
+
+      .projects {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .project {
+        background: var(--card);
+        border: 1px solid #334155;
+        border-radius: 0.85rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+
+      .project h3 {
+        margin: 0;
+      }
+
+      .tags {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .details {
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        border-radius: 0.55rem;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .feedback {
+        min-height: 1.2rem;
+        color: var(--accent);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>My Portfolio</h1>
+        <p class="lede">
+          Explore projects by category, search by keyword, and quickly share links.
+        </p>
+      </header>
+
+      <section aria-labelledby="projects-title">
+        <h2 id="projects-title">Projects</h2>
+
+        <div class="controls">
+          <div id="category-filters" class="chip-group" aria-label="Project categories"></div>
+          <input
+            id="project-search"
+            class="search"
+            type="search"
+            placeholder="Search projects, tags, or technologies"
+            aria-label="Search projects"
+          />
+        </div>
+
+        <p id="share-feedback" class="feedback" aria-live="polite"></p>
+        <div id="project-list" class="projects"></div>
+      </section>
+    </main>
+
+    <script>
+      const projects = [
+        {
+          name: "Portfolio CMS",
+          category: "Web",
+          tags: ["React", "Node.js", "PostgreSQL"],
+          description: "A CMS to manage and publish portfolio projects dynamically.",
+          demoUrl: "https://example.com/cms-demo",
+          sourceUrl: "https://github.com/example/portfolio-cms"
+        },
+        {
+          name: "Task API",
+          category: "API",
+          tags: ["TypeScript", "Express", "Swagger"],
+          description: "A documented REST API for task planning and prioritization.",
+          demoUrl: "https://example.com/task-api",
+          sourceUrl: "https://github.com/example/task-api"
+        },
+        {
+          name: "Expense Insight",
+          category: "Data",
+          tags: ["Python", "Pandas", "Plotly"],
+          description: "An analytics dashboard to visualize and forecast personal expenses.",
+          demoUrl: "https://example.com/expense-insight",
+          sourceUrl: "https://github.com/example/expense-insight"
+        }
+      ];
+
+      const projectList = document.getElementById("project-list");
+      const filterContainer = document.getElementById("category-filters");
+      const searchInput = document.getElementById("project-search");
+      const shareFeedback = document.getElementById("share-feedback");
+      const categories = ["All", ...new Set(projects.map((project) => project.category))];
+
+      let activeCategory = "All";
+      let searchText = "";
+
+      function createLinkButton(label, url) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "action-btn";
+        link.textContent = label;
+        return link;
+      }
+
+      async function shareProject(project) {
+        const shareText = `${project.name} - ${project.demoUrl}`;
+
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: project.name, text: shareText, url: project.demoUrl });
+          } else if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(project.demoUrl);
+          } else {
+            throw new Error("Share not supported");
+          }
+          shareFeedback.textContent = `Shared: ${project.name}`;
+        } catch {
+          shareFeedback.textContent = `Could not share ${project.name}.`;
+        }
+      }
+
+      function renderProjects() {
+        projectList.innerHTML = "";
+        const normalizedSearch = searchText.trim().toLowerCase();
+
+        const filtered = projects.filter((project) => {
+          const matchesCategory = activeCategory === "All" || project.category === activeCategory;
+          const searchable = [project.name, project.description, project.category, ...project.tags]
+            .join(" ")
+            .toLowerCase();
+          const matchesSearch = !normalizedSearch || searchable.includes(normalizedSearch);
+          return matchesCategory && matchesSearch;
+        });
+
+        if (!filtered.length) {
+          const emptyState = document.createElement("p");
+          emptyState.className = "details";
+          emptyState.textContent = "No projects match your filters.";
+          projectList.appendChild(emptyState);
+          return;
+        }
+
+        for (const project of filtered) {
+          const card = document.createElement("article");
+          card.className = "project";
+
+          const title = document.createElement("h3");
+          title.textContent = project.name;
+
+          const category = document.createElement("p");
+          category.className = "tags";
+          category.textContent = `${project.category} • ${project.tags.join(", ")}`;
+
+          const description = document.createElement("p");
+          description.className = "details";
+          description.textContent = project.description;
+
+          const actions = document.createElement("div");
+          actions.className = "actions";
+          actions.append(createLinkButton("Demo", project.demoUrl));
+          actions.append(createLinkButton("Source", project.sourceUrl));
+
+          const shareButton = document.createElement("button");
+          shareButton.type = "button";
+          shareButton.className = "action-btn";
+          shareButton.textContent = "Share";
+          shareButton.addEventListener("click", () => shareProject(project));
+          actions.append(shareButton);
+
+          card.append(title, category, description, actions);
+          projectList.append(card);
+        }
+      }
+
+      function renderFilters() {
+        filterContainer.innerHTML = "";
+        for (const category of categories) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "chip";
+          button.textContent = category;
+          button.setAttribute("aria-pressed", String(category === activeCategory));
+          button.addEventListener("click", () => {
+            activeCategory = category;
+            renderFilters();
+            renderProjects();
+          });
+          filterContainer.append(button);
+        }
+      }
+
+      searchInput.addEventListener("input", (event) => {
+        searchText = event.target.value;
+        renderProjects();
+      });
+
+      renderFilters();
+      renderProjects();
+    </script>
+  </body>
+</html>
