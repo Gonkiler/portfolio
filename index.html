@@ -148,7 +148,7 @@
           />
         </div>
 
-        <p id="share-feedback" class="feedback" aria-live="polite"></p>
+        <p id="share-feedback" class="feedback" aria-live="polite" aria-atomic="true"></p>
         <div id="project-list" class="projects"></div>
       </section>
     </main>
@@ -186,9 +186,11 @@
       const searchInput = document.getElementById("project-search");
       const shareFeedback = document.getElementById("share-feedback");
       const categories = ["All", ...new Set(projects.map((project) => project.category))];
+      const SEARCH_DEBOUNCE_DELAY_MS = 120;
 
       let activeCategory = "All";
       let searchText = "";
+      let searchDebounceTimerId;
 
       function createLinkButton(label, url) {
         const link = document.createElement("a");
@@ -206,14 +208,23 @@
         try {
           if (navigator.share) {
             await navigator.share({ title: project.name, text: shareText, url: project.demoUrl });
+            shareFeedback.textContent = `Shared: ${project.name}`;
           } else if (navigator.clipboard?.writeText) {
             await navigator.clipboard.writeText(project.demoUrl);
+            shareFeedback.textContent = `Copied link for ${project.name}.`;
           } else {
             throw new Error("Share not supported");
           }
-          shareFeedback.textContent = `Shared: ${project.name}`;
-        } catch {
-          shareFeedback.textContent = `Could not share ${project.name}.`;
+        } catch (error) {
+          if (error instanceof DOMException && error.name === "AbortError") {
+            shareFeedback.textContent = "Share cancelled.";
+            setTimeout(() => {
+              shareFeedback.textContent = "";
+            }, 1200);
+            return;
+          }
+          console.error(error);
+          shareFeedback.textContent = `Could not share ${project.name}. Please use the Demo link.`;
         }
       }
 
@@ -289,7 +300,8 @@
 
       searchInput.addEventListener("input", (event) => {
         searchText = event.target.value;
-        renderProjects();
+        clearTimeout(searchDebounceTimerId);
+        searchDebounceTimerId = setTimeout(renderProjects, SEARCH_DEBOUNCE_DELAY_MS);
       });
 
       renderFilters();
