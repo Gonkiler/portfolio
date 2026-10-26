@@ -1,0 +1,74 @@
+{
+  "title": "Ether",
+  "tagline": "TFG - Proyecto Final de Grado",
+  "genre": ["Aventura", "Acción", "RPG"],
+  "status": "finalizado",
+  "statusNote": "Vertical slice finalizada como Trabajo Fin de Grado (ETSI Informáticos, UPM, enero de 2024): nivel tutorial y modo supervivencia jugables. Las mazmorras elementales y el sonido quedan para futuras iteraciones.",
+  "featured": true,
+  "cover": "cover.png",
+  "summary": "Salter despierta con amnesia en unas ruinas que guardan los secretos de la alquimia. Explora, resuelve puzles y combate con el poder de los elementos para recuperar su pasado.",
+  "overview": "Ether es un juego de exploración, aventura y RPG en 3D low-poly con vista isométrica y un sistema de combate dinámico de estilo roguelike. El jugador controla a Salter, que aprende a pelear, esquivar y usar poderes elementales mientras investiga un territorio custodiado por enemigos y descubre quién es.",
+  "features": [
+    "Gráficos 3D de tipo low-poly.",
+    "Zonas temáticas diferenciadas, con mazmorras elementales.",
+    "Desarrollo no lineal tras el tutorial.",
+    "Combate dinámico con elementos de acción y roguelike.",
+    "Puzles basados en las formas elementales.",
+    "Modo supervivencia por rondas con tienda y tótems de mejora."
+  ],
+  "tech": ["Unity", "C#", "Blender"],
+  "links": [
+    { "label": "Consultar TFG", "url": "https://oa.upm.es/80460/" }
+  ],
+  "docs": [
+    {
+      "id": "diseno",
+      "label": "GDD",
+      "title": "Diseño",
+      "description": "Game Design Document: descripción, gameplay, interfaz, arte, sonido y niveles.",
+      "pages": [
+        { "id": "descripcion", "title": "Descripción del juego", "status": "borrador" },
+        { "id": "gameplay", "title": "Gameplay y mecánicas", "status": "borrador" },
+        { "id": "interfaz", "title": "Interfaz de usuario", "status": "borrador" },
+        { "id": "arte", "title": "Arte y vídeo", "status": "borrador" },
+        { "id": "sonido", "title": "Sonido y música", "status": "borrador" },
+        { "id": "niveles", "title": "Diseño de niveles", "status": "borrador" },
+        { "id": "bibliografia", "title": "Bibliografía", "status": "borrador" }
+      ]
+    },
+    {
+      "id": "desarrollo",
+      "label": "TDD",
+      "title": "Desarrollo",
+      "description": "Documento técnico: arquitectura, herramientas, sistemas y diario de desarrollo.",
+      "pages": [
+        { "id": "arquitectura", "title": "Arquitectura técnica", "status": "borrador" },
+        { "id": "herramientas", "title": "Herramientas y pipeline", "status": "borrador" },
+        { "id": "sistemas", "title": "Sistemas implementados", "status": "borrador" },
+        { "id": "diario", "title": "Diario de desarrollo", "status": "borrador" }
+      ]
+    },
+    {
+      "id": "testing",
+      "label": "QA",
+      "title": "Testing",
+      "description": "Calidad: evaluación con usuarios, accesibilidad y registro de errores.",
+      "pages": [
+        { "id": "evaluacion-planificada", "title": "Evaluación planificada", "status": "borrador" },
+        { "id": "evaluacion-realizada", "title": "Evaluación realizada", "status": "borrador" },
+        { "id": "accesibilidad", "title": "Pautas de accesibilidad", "status": "borrador" },
+        { "id": "bugs", "title": "Errores y rendimiento", "status": "pendiente" }
+      ]
+    },
+    {
+      "id": "lanzamiento",
+      "label": "Release",
+      "title": "Lanzamiento",
+      "description": "Publicación del juego y balance final del proyecto.",
+      "pages": [
+        { "id": "publicacion", "title": "Publicación", "status": "pendiente" },
+        { "id": "postmortem", "title": "Postmortem", "status": "pendiente" }
+      ]
+    }
+  ]
+}

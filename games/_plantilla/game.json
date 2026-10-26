@@ -1,0 +1,68 @@
+{
+  "title": "Nombre del juego",
+  "tagline": "Frase corta que acompaña al título",
+  "genre": ["Género", "Subgénero"],
+  "status": "concepto",
+  "statusNote": "En qué punto está el proyecto ahora mismo.",
+  "featured": false,
+  "cover": "",
+  "summary": "Descripción breve para la tarjeta y el slider de la home.",
+  "overview": "Descripción completa para la ficha del juego.",
+  "features": [
+    "Característica clave 1.",
+    "Característica clave 2."
+  ],
+  "tech": ["Motor", "Lenguaje"],
+  "links": [],
+  "docs": [
+    {
+      "id": "diseno",
+      "label": "GDD",
+      "title": "Diseño",
+      "description": "Game Design Document: descripción, gameplay, interfaz, arte, sonido y niveles.",
+      "pages": [
+        { "id": "descripcion", "title": "Descripción del juego", "status": "pendiente" },
+        { "id": "gameplay", "title": "Gameplay y mecánicas", "status": "pendiente" },
+        { "id": "interfaz", "title": "Interfaz de usuario", "status": "pendiente" },
+        { "id": "arte", "title": "Arte y vídeo", "status": "pendiente" },
+        { "id": "sonido", "title": "Sonido y música", "status": "pendiente" },
+        { "id": "niveles", "title": "Diseño de niveles", "status": "pendiente" },
+        { "id": "bibliografia", "title": "Bibliografía", "status": "pendiente" }
+      ]
+    },
+    {
+      "id": "desarrollo",
+      "label": "TDD",
+      "title": "Desarrollo",
+      "description": "Documento técnico: arquitectura, herramientas, sistemas y diario de desarrollo.",
+      "pages": [
+        { "id": "arquitectura", "title": "Arquitectura técnica", "status": "pendiente" },
+        { "id": "herramientas", "title": "Herramientas y pipeline", "status": "pendiente" },
+        { "id": "sistemas", "title": "Sistemas implementados", "status": "pendiente" },
+        { "id": "diario", "title": "Diario de desarrollo", "status": "pendiente" }
+      ]
+    },
+    {
+      "id": "testing",
+      "label": "QA",
+      "title": "Testing",
+      "description": "Calidad: evaluación con usuarios, accesibilidad y registro de errores.",
+      "pages": [
+        { "id": "evaluacion-planificada", "title": "Evaluación planificada", "status": "pendiente" },
+        { "id": "evaluacion-realizada", "title": "Evaluación realizada", "status": "pendiente" },
+        { "id": "accesibilidad", "title": "Pautas de accesibilidad", "status": "pendiente" },
+        { "id": "bugs", "title": "Errores y rendimiento", "status": "pendiente" }
+      ]
+    },
+    {
+      "id": "lanzamiento",
+      "label": "Release",
+      "title": "Lanzamiento",
+      "description": "Publicación del juego y balance final del proyecto.",
+      "pages": [
+        { "id": "publicacion", "title": "Publicación", "status": "pendiente" },
+        { "id": "postmortem", "title": "Postmortem", "status": "pendiente" }
+      ]
+    }
+  ]
+}
