@@ -1,0 +1,17 @@
+[
+  {
+    "id": "nueva-web",
+    "date": "2026-10-12",
+    "tag": "Estudio",
+    "title": "Nueva web de Poza Studios",
+    "summary": "La web pasa a ser modular: cada juego tiene su propia ficha y un espacio de documentación abierta con su GDD, su documento técnico y sus fases de testing y lanzamiento."
+  },
+  {
+    "id": "gdd-ether",
+    "date": "2026-10-13",
+    "tag": "Documentación",
+    "game": "ether",
+    "title": "El GDD de Ether, disponible en la web",
+    "summary": "Ya se pueden consultar el documento de diseño de Ether y los resultados de su evaluación con usuarios: descripción del juego, gameplay, interfaz, arte, sonido, niveles y accesibilidad."
+  }
+]
