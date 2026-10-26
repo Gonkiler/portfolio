@@ -1,0 +1,138 @@
+/* -- GAME PAGE -- (amplia los estilos .project-* de main.css) */
+.project-page.with-nav {
+  padding-top: calc(var(--nav-h) + 3rem);
+}
+
+.project-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.game-docs {
+  margin-top: 5rem;
+}
+
+.game-docs .section-title {
+  margin-bottom: 2.5rem;
+}
+
+.phase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.phase-card {
+  background: rgba(18, 20, 26, 0.95);
+  border: 1px solid var(--gray-800);
+  padding: 1.5rem;
+}
+
+.phase-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sapphire-light);
+  margin-bottom: 0.75rem;
+}
+
+.phase-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--gray-600);
+}
+
+.phase-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.phase-desc {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--gray-400);
+  margin-bottom: 1.25rem;
+}
+
+.phase-progress {
+  height: 2px;
+  background: var(--gray-800);
+}
+
+.phase-progress-bar {
+  height: 100%;
+  background: var(--sapphire-light);
+}
+
+.phase-count {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin: 0.5rem 0 1rem;
+}
+
+.phase-pages {
+  list-style: none;
+}
+
+.phase-pages a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--gray-200);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.phase-pages a:hover { color: var(--white); }
+
+/* Estado de cada pagina de documentacion */
+.doc-dot {
+  flex: none;
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-600);
+}
+
+.doc-dot-borrador {
+  border-color: var(--sapphire-light);
+  background: linear-gradient(90deg, var(--sapphire-light) 50%, transparent 50%);
+}
+
+.doc-dot-completo {
+  border-color: var(--sapphire-light);
+  background: var(--sapphire-light);
+}
+
+@media (max-width: 1100px) {
+  .phase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .project-page.with-nav { padding-top: calc(var(--nav-h) + 1.5rem); }
+  .phase-grid { grid-template-columns: 1fr; }
+}

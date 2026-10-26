@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Juego - Poza Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+<div id="section-nav"></div>
+
+  <main class="project-page with-nav">
+    <a class="project-back" href="index.html#games">&larr; Todos los juegos</a>
+
+    <section class="project-hero">
+      <p class="project-kicker"><span id="game-kicker"></span> <span class="status-badge" id="game-status-badge"></span></p>
+      <h1 class="project-title" id="game-title"></h1>
+      <p class="project-summary" id="game-summary"></p>
+      <div class="game-actions" id="game-actions"></div>
+    </section>
+
+    <section class="project-detail-grid">
+      <article class="project-detail-card">
+        <h2>Resumen</h2>
+        <p id="game-overview"></p>
+      </article>
+
+      <article class="project-detail-card">
+        <h2>Características clave</h2>
+        <ul id="game-features"></ul>
+      </article>
+
+      <article class="project-detail-card">
+        <h2>Tecnologías</h2>
+        <ul id="game-tech"></ul>
+      </article>
+
+      <article class="project-detail-card">
+        <h2>Estado</h2>
+        <p id="game-status"></p>
+      </article>
+    </section>
+
+    <section class="game-docs" id="game-docs">
+      <div class="section-label">Cómo se ha hecho</div>
+      <h2 class="section-title">DOCUMENTACIÓN</h2>
+      <div class="phase-grid" id="game-phases"></div>
+    </section>
+  </main>
+
+<div id="section-contact"></div>
+
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
